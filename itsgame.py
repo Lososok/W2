@@ -18,6 +18,8 @@ COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
 
 n = 0
 k = 0
+s = 0
+q = 0
 
 def new_ball():
     '''
@@ -36,16 +38,19 @@ def click(event):
     and says it's inside or outside
     event - show coordinates of points
     '''
-    global n, k
+    global n, k, s, q
     '''print(x, y, r)
     print(event.pos)'''
     if (x - event.pos[0])**2 + (y - event.pos[1])**2 <= r**2:
         print('Got')
         n+=1
         k+=1
+        s+= ((x - event.pos[0])**2 + (y - event.pos[1])**2) / r**2
+        q+=1
     else:
         print('Miss')
         k+=1
+        q+=1
         
 
 pygame.display.update()
@@ -66,7 +71,12 @@ while not finished:
                     n, k = 0, 0
                 else:
                     print("You haven't shoot yet")
-
+            elif event.key == pygame.K_s:
+                if q != 0:
+                    print('Score:', s/q * 1000)
+                    q, s = 0, 0
+                else:
+                    print("You haven't shoot yet to get score")
     new_ball()
     pygame.display.update()
     screen.fill(BLACK)
