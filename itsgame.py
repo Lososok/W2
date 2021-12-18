@@ -16,6 +16,9 @@ CYAN = (0, 255, 255)
 BLACK = (0, 0, 0)
 COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
 
+n = 0
+k = 0
+
 def new_ball():
     '''
     draw new ball
@@ -33,12 +36,16 @@ def click(event):
     and says it's inside or outside
     event - show coordinates of points
     '''
-    print(x, y, r)
-    print(event.pos)
+    global n, k
+    '''print(x, y, r)
+    print(event.pos)'''
     if (x - event.pos[0])**2 + (y - event.pos[1])**2 <= r**2:
-        print('Yes')
+        print('Got')
+        n+=1
+        k+=1
     else:
-        print('No')
+        print('Miss')
+        k+=1
         
 
 pygame.display.update()
@@ -52,6 +59,14 @@ while not finished:
             finished = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             click(event)
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_TAB:
+                if k != 0:
+                    print('Accuracy: ', n/k * 100,'%')
+                    n, k = 0, 0
+                else:
+                    print("You haven't shoot yet")
+
     new_ball()
     pygame.display.update()
     screen.fill(BLACK)
