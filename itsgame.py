@@ -54,7 +54,6 @@ def click(event):
         k+=1
         s+= ((x - event.pos[0])**2 + (y - event.pos[1])**2) / r**2
         q+=1
-    else:
         print('Miss')
         k+=1
         q+=1
@@ -71,6 +70,8 @@ while not finished:
             finished = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             click(event)
+            if (x - event.pos[0])**2 + (y - event.pos[1])**2 <= r**2:
+                x, y = 0, 0
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_TAB:
                 if k != 0:
