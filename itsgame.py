@@ -26,7 +26,46 @@ y = 0
 
 def vec(speed):
     global x, y, r, color, a, b
-    if  100 < x < 1100 and 100 < y < 700:
+    if  100 < x < 1100 and 100 < y < 700:                                       #ruls of motion. It's hardcode, I think
+        x += a * speed
+        y += b * 2 * speed / 3
+    elif (x > 1100 or x < 100 or y < 100 or y > 700) and x != 0 and y != 0:
+        if x < 100:
+            a = randint(0, 1)
+            if y < 100:
+                if a == 0:
+                    b = 1
+                else:
+                    b = randint(0, 1)
+            if y > 700:
+                if a == 0:
+                    b = -1
+                else:
+                    b = randint(-1, 0)
+        elif x > 1100:
+            a = randint(-1, 0)
+            if y < 100:
+                if a == 0:
+                    b = 1
+                else:
+                    b = randint(0, 1)
+            if y > 700:
+                if a == 0:
+                    b = -1
+                else:
+                    b = randint(-1, 0)
+        elif 100 < x < 1100 and y < 100:
+            a = randint(-1, 1)
+            if a == 0:
+                b = 1
+            else:
+                b = randint(0, 1)
+        elif 100 < x < 1100 and y > 700:
+            a = randint(-1, 1)
+            if a == 0:
+                b = -1
+            else:
+                b = randint(-1, 0)
         x += a * speed
         y += b * 2 * speed / 3
     else:
