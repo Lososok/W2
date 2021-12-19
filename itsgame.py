@@ -4,7 +4,7 @@ from random import randint
 
 pygame.init()
 
-FPS = 2
+FPS = 30
 screen = pygame.display.set_mode((1200, 800))
     
 RED = (255, 0, 0)
@@ -20,18 +20,25 @@ n = 0
 k = 0
 s = 0
 q = 0
+speed = 0
+x = 0
+y = 0
 
-def new_ball():
-    '''
-    draw new ball
-    '''
-    global x, y, r
-    x = randint(100, 1100)
-    y = randint(100, 700)
-    r = randint(10, 100)
-    color = COLORS[randint(0, 5)]
-    circle(screen, color, (x, y), r)
-
+def vec(speed):
+    global x, y, r, color, a, b
+    if  100 < x < 1100 and 100 < y < 700:
+        x += a * speed
+        y += b * 2 * speed / 3
+    else:
+        x = randint(100, 1100)
+        y = randint(100, 700)
+        r = randint(25, 100)
+        color = COLORS[randint(0, 5)]
+        a = randint(-1, 1)
+        b = randint(-1, 1)
+        if a == b and a == 0:
+            a = 1
+            
 def click(event):
     '''
     fun prints coordinates of point of the center ball and point of click
@@ -77,8 +84,11 @@ while not finished:
                     q, s = 0, 0
                 else:
                     print("You haven't shoot yet to get score")
-    new_ball()
+    vec(speed)
+    speed = r * 0.125
+    circle(screen, color, (x, y), r)
     pygame.display.update()
     screen.fill(BLACK)
+    
 
 pygame.quit()
