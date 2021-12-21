@@ -4,6 +4,8 @@ from random import randint
 
 pygame.init()
 
+# global variables
+
 FPS = 1
 screen = pygame.display.set_mode((1200, 800))
     
@@ -20,8 +22,28 @@ p = []
 score = 0
 for i in range(quantity):
     p.append([])
+
+def xyr():
+    ''' creates random center (x, y), radius r, color color which add in tuple '''
+    x = randint(100, 1100)
+    y = randint(100, 700)
+    r = randint(25, 100)
+    color = COLORS[randint(0, 5)]
+    return x, y, r, color
     
+def draw_ball(c):
+    ''' draws ball with center (x, y), radius r and color color '''
+    x = c[0]
+    y = c[1]
+    r = c[2]
+    color = c[3]
+    circle(screen, color, (x, y), r)
+
 def click(event, c):
+    '''
+    checks the hit and counts the score
+    c - list args [x, y, r]
+    '''
     global score
     n = 0
     for i in range(quantity):
@@ -36,20 +58,7 @@ def click(event, c):
         print('Miss')
         print('Score:', score)
         score = 0
-    
-def draw_ball(c):
-    x = c[0]
-    y = c[1]
-    r = c[2]
-    color = c[3]
-    circle(screen, color, (x, y), r)
-
-def xyr():
-    x = randint(100, 1100)
-    y = randint(100, 700)
-    r = randint(25, 100)
-    color = COLORS[randint(0, 5)]
-    return x, y, r, color
+ 
 
 pygame.display.update()
 clock = pygame.time.Clock()
@@ -72,7 +81,7 @@ while not finished:
             elif event.key == pygame.K_s:
                 print('Score:', score)
                 score = 0
-    for i in range(quantity):
+    for i in range(quantity):           # create some balls with random args
         p[i] = xyr()
         draw_ball(p[i]) 
     pygame.display.update()
