@@ -1,6 +1,6 @@
 import pygame
 from pygame.draw import *
-from random import randint
+from random import randint, choice
 
 pygame.init()
 
@@ -65,16 +65,21 @@ def move(c):
     elif (x > 1100 or x < 100 or y < 100 or y > 700) and x != 0 and y != 0:
         if x < 100:
             a[i] = randint(0, 1)
-            if y < 100:
+            if 100 < y < 700:
                 if a[i] == 0:
-                    b[i] = 1
+                     b[i] = choice([-1, 1])
                 else:
-                    b[i] = randint(0, 1)
-            if y > 700:
+                    b[i] = randint(-1, 1)
+            elif y > 700:
                 if a[i] == 0:
                     b[i] = -1
                 else:
                     b[i] = randint(-1, 0)
+            elif y < 100:
+                if a[i] == 0:
+                    b[i] = 1
+                else:
+                    b[i] = randint(0, 1)
         elif x > 1100:
             a[i] = randint(-1, 0)
             if y < 100:
