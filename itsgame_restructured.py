@@ -6,7 +6,7 @@ pygame.init()
 
 # global variables
 
-FPS = 1
+FPS = 30
 screen = pygame.display.set_mode((1200, 800))
     
 RED = (255, 0, 0)
@@ -17,11 +17,15 @@ MAGENTA = (255, 0, 255)
 CYAN = (0, 255, 255)
 BLACK = (0, 0, 0)
 COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
-quantity = 3
+quantity = 4
 p = []
+a = []
+b = []
 score = 0
 for i in range(quantity):
     p.append([])
+    a.append(0)
+    b.append(0)
 
 def xyr():
     ''' creates random center (x, y), radius r, color color which add in tuple '''
@@ -38,6 +42,77 @@ def draw_ball(c):
     r = c[2]
     color = c[3]
     circle(screen, color, (x, y), r)
+
+def move(c):
+    '''
+    responsible for the movement of all balls
+    c - p[i] which save value of x, y, r and color
+    '''
+    global a, b, p
+    x = p[i][0]
+    y = p[i][1]
+    r = p[i][2]
+    speed = r * 0.125
+    if  100 < x < 1100 and 100 < y < 700:       #ruls of motion. It's hardcode, I think
+        if a[i] == 0 and b[i] == 0:
+            a[i] = randint(-1, 1)
+            b[i] = randint(-1, 1)            
+            x += a[i] * speed
+            y += b[i] * 2 * speed / 3
+        else:
+            x += a[i] * speed
+            y += b[i] * 2 * speed / 3
+    elif (x > 1100 or x < 100 or y < 100 or y > 700) and x != 0 and y != 0:
+        if x < 100:
+            a[i] = randint(0, 1)
+            if y < 100:
+                if a[i] == 0:
+                    b[i] = 1
+                else:
+                    b[i] = randint(0, 1)
+            if y > 700:
+                if a[i] == 0:
+                    b[i] = -1
+                else:
+                    b[i] = randint(-1, 0)
+        elif x > 1100:
+            a[i] = randint(-1, 0)
+            if y < 100:
+                if a[i] == 0:
+                    b[i] = 1
+                else:
+                    b[i] = randint(0, 1)
+            if y > 700:
+                if a[i] == 0:
+                    b[i] = -1
+                else:
+                    b[i] = randint(-1, 0)
+        elif 100 < x < 1100 and y < 100:
+            a[i] = randint(-1, 1)
+            if a[i] == 0:
+                b[i] = 1
+            else:
+                b[i] = randint(0, 1)
+        elif 100 < x < 1100 and y > 700:
+            a[i] = randint(-1, 1)
+            if a[i] == 0:
+                b[i] = -1
+            else:
+                b[i] = randint(-1, 0)
+        x += a[i] * speed
+        y += b[i] * 2 * speed / 3
+    else:
+        x = randint(100, 1100)
+        y = randint(100, 700)
+        r = randint(25, 100)
+        color = COLORS[randint(0, 5)]
+        a[i] = randint(-1, 1)
+        b[i] = randint(-1, 1)
+        if a[i] == b[i] and a[i] == 0:
+            a[i] = 1
+    p[i][0] = x
+    p[i][1] = y
+    return p[i][0], p[i][1], p[i][2], p[i][3]
 
 def click(event, c):
     '''
@@ -81,10 +156,14 @@ while not finished:
             elif event.key == pygame.K_s:
                 print('Score:', score)
                 score = 0
-    for i in range(quantity):           # create some balls with random args
-        p[i] = xyr()
-        draw_ball(p[i]) 
+    for i in range(quantity):   # create some balls with random args
+        if len(p[i]) == 0:
+            p[i] = list(xyr())      #   create start value of circle
+            draw_ball(p[i])
+        else:
+            draw_ball(move(p[i]))   #   use chenged value of circle
     pygame.display.update()
     screen.fill(BLACK)
+    
 
 pygame.quit()
