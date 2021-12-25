@@ -22,7 +22,7 @@ p = []
 a = []
 b = []
 score = 0
-for i in range(quantity):
+for i in range(quantity):       
     p.append([])
     a.append(0)
     b.append(0)
@@ -42,6 +42,17 @@ def draw_ball(c):
     r = c[2]
     color = c[3]
     circle(screen, color, (x, y), r)
+
+def fract(c):                                                   # in work
+    x = c[0]
+    y = c[1]
+    r = c[2]
+    color = c[3]
+    n = randint(3, 8)
+    for step in range(n):
+        line(screen, color, (x, y), (x + r, y))
+        x += r
+        y += r
 
 def move(c):
     '''
@@ -151,16 +162,20 @@ while not finished:
             finished = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             click(event, p[i])
+            for i in range(quantity):
+                x = p[i][0]
+                y = p[i][1]
+                r = p[i][2]
+                if (x - event.pos[0])**2 + (y - event.pos[1])**2 <= r**2:
+                    p[i][0] = randint(100, 1100)
+                    p[i][1] = randint(100, 700)
+                    p[i][2] = randint(25, 100)
+                    p[i][3] = COLORS[randint(0, 5)]
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_TAB:
-                if k != 0:
-                    print('Accuracy: ', n/k * 100,'%')
-                    n, k = 0, 0
-                else:
-                    print("You haven't shoot yet")
+                print(xyr()[3])
             elif event.key == pygame.K_s:
                 print('Score:', score)
-                score = 0
     for i in range(quantity):   # create some balls with random args
         if len(p[i]) == 0:
             p[i] = list(xyr())      #   create start value of circle
