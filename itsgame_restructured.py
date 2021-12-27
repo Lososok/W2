@@ -1,6 +1,6 @@
 import pygame
 from pygame.draw import *
-from random import randint, choice
+from random import randint, choice, random
 
 pygame.init()
 
@@ -43,16 +43,14 @@ def draw_ball(c):
     color = c[3]
     circle(screen, color, (x, y), r)
 
-def fract(c):                                                   # in work
+def draw_notball(c):                                                   # in work
     x = c[0]
     y = c[1]
     r = c[2]
     color = c[3]
-    n = randint(3, 8)
-    for step in range(n):
-        line(screen, color, (x, y), (x + r, y))
-        x += r
-        y += r
+    xr = r * round(random() * 2, 2)
+    yr = r * round(random() * 2, 2) * 2/3
+    ellipse(screen, color, ((x, y), (xr, yr)))
 
 def move(c):
     '''
@@ -148,7 +146,37 @@ def click(event, c):
     if n == 0:
         print('Miss')
         print('Score:', score)
+        leaderboard(score)
+        sort_file('leaderboard.txt')
         score = 0
+
+def leaderboard(score):
+    text = open('leaderboard.txt', 'r+')
+    name = input('Your name is...')
+    textfile = text.read()
+    line = name, ' ', str(score), '\n'
+    textfile = ''.join(line)
+    text.write(textfile)
+    text.close()
+
+def sort_file(file):
+    text = open(file, 'r+')
+    textfile = text.readlines()
+    names = []
+    scores = []
+    scores_names = []
+    for el in textfile:
+        names.append(el.split(' ')[0])
+        scores.append(int(el.split(' ')[1]))
+    for i in range(len(names)):
+        elem = [scores[i], names[i]]
+        scores_names.append(elem)
+    scores_names.sort(reverse=True)
+    text.seek(0)
+    for line in range(len(textfile)):
+        position = str(scores_names[line][1]) + ' ' + str(scores_names[line][0]) + '\n'
+        text.write(position)
+    text.close()
  
 
 pygame.display.update()
@@ -173,7 +201,7 @@ while not finished:
                     p[i][3] = COLORS[randint(0, 5)]
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_TAB:
-                print(xyr()[3])
+                None
             elif event.key == pygame.K_s:
                 print('Score:', score)
     for i in range(quantity):   # create some balls with random args
