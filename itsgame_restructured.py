@@ -140,17 +140,17 @@ def click(event, c):
         y = p[i][1]
         r = p[i][2]
         if (x - event.pos[0])**2 + (y - event.pos[1])**2 <= r**2:
-            print('Got')
+            #print('Got')
             n += 1
             score += 100
     if n == 0:
-        print('Miss')
+        #print('Miss')
         print('Score:', score)
         leaderboard(score)
         sort_file('leaderboard.txt')
         score = 0
 
-def leaderboard(score):
+def leaderboard(score):                         # need swich 'r+'
     text = open('leaderboard.txt', 'r+')
     name = input('Your name is...')
     textfile = text.read()
@@ -201,7 +201,10 @@ while not finished:
                     p[i][3] = COLORS[randint(0, 5)]
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_TAB:
-                None
+                text = open('leaderboard.txt', 'r')
+                print()
+                print(text.read())
+                text.close()
             elif event.key == pygame.K_s:
                 print('Score:', score)
     for i in range(quantity):   # create some balls with random args
